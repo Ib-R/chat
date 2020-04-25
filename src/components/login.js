@@ -1,9 +1,7 @@
 import React from "react";
-import { Redirect } from "react-router-dom";
-import { Messages } from "./util/messages";
-import { GetCookie } from "./util/util";
+import { Messages } from "../util/messages";
 
-export class Login extends React.Component {
+class Login extends React.Component {
     constructor(props){
         super(props);
         this.state = {
@@ -15,34 +13,34 @@ export class Login extends React.Component {
 
     render() {
         var that = this // binding This keyword to variable for accessbilty reasons
-        const server = this.state.server;
+        const {server, message, showMessages} = this.state;
+
         function setServer(e){
             that.setState({server: e.target.value})
-            console.log(e.target.value);
         }    
-        function login(e){
+
+        const login = (e) => {
             e.preventDefault()
-            const data = {username: e.target.username.value, password: e.target.password.value}
+            // const data = {username: e.target.username.value, password: e.target.password.value}
             fetch("//"+server+"/login/",
                 {
                     method: "POST",
-                    body: "username=" +e.target.username.value+"&password="+e.target.password.value,
+                    body: `username=${e.target.username.value}&password=${e.target.password.value}&room=${e.target.room.value}`,
                     headers:({
                         "Content-Type":"application/x-www-form-urlencoded"
                     })
                 })
             .then((res)=>{
                 res.json()
-                .then((data)=>{
+                .then((data)=>{                    
                     if(data.user){
-                        console.log(data.user);
                         document.cookie = "username="+data.user+"; expires="+Date(Date.now()+9000)+"";
                         document.cookie = "server="+server+"; expires="+Date(Date.now()+9000)+"";
-                        console.log("Get cookie:",GetCookie("username"));
-                        window.location.replace("/room");
+                        document.cookie = "room="+data.room+"; expires="+Date(Date.now()+9000)+"";
+                        this.props.authenticate();
                     }else{
-                        that.setState({showMessages:true}); // show the message div
-                        that.setState({message: data.message.message}); // assing the message to the state
+                        this.setState({showMessages:true}); // show the message div
+                        this.setState({message: data.message.message}); // assing the message to the state
                         console.log(data.message);
                     }
                 });
@@ -50,17 +48,8 @@ export class Login extends React.Component {
             .catch((err)=> console.log("login error:",err));
         }
 
-        function checkLoginStatus(){
-            if(GetCookie("username") !== ""){
-                return true
-            }
-        }
-
         return(
             <div className="container">
-
-            {/* Redirect if user is logged in */}
-            {checkLoginStatus() ? <Redirect to="/room"/> : null}
 
                 <div id="userFormArea">
                     <form onSubmit={login} className="form-signin" id="userForm">
@@ -69,7 +58,7 @@ export class Login extends React.Component {
                             <h1 className="h3 mb-3 font-weight-normal">Please sign in</h1>
                         </div>
 
-                        { this.state.showMessages ? <Messages message={this.state.message} /> : null }
+                        { showMessages ? <Messages message={message} /> : null }
 
                         <div className="form-label-group">
                             <input type="text" placeholder="Enter Username" name="username" className="form-control" id="username"/>
@@ -79,16 +68,22 @@ export class Login extends React.Component {
                             <input type="password" placeholder="Enter Password" name="password" className="form-control" id="password"/>
                             <label htmlFor="password">Enter Password</label>
                         </div>  
+                        <div className="form-label-group"> 
+                            <input type="text" placeholder="Enter Room" name="room" className="form-control" id="room"/>
+                            <label htmlFor="room">Enter Room</label>
+                        </div>  
                         <div className="form-label-group">
                             <input onChange={setServer} type="text" placeholder="Enter Server" name="server" className="form-control" id="server"/>
                             <label htmlFor="server">Enter Server</label>
                         </div> 
                         <br/>
                         <input type="submit" className="btn btn-lg btn-primary btn-block" value="Login" />
-                        <p className="text-center mt-5 mb-3 text-muted">&copy;2018</p>
+                        <p className="text-center mt-5 mb-3 text-muted">&copy;2018 - 2020</p>
                     </form>
                 </div>
             </div>
         );
     }
 }
+
+export default Login;
