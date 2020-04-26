@@ -121,7 +121,7 @@ class Room extends Component {
 						top: "0",
 						border: "none",
 					}}
-					src="bg/index.html"
+					src={`${process.env.PUBLIC_URL}/bg/index.html`}
 				></iframe>
 			</div>
 		);

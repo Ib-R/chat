@@ -39,12 +39,13 @@ class App extends Component {
         <Router>
           <Suspense fallback={<h1 className="text-center">Loading...</h1>}>
             <Switch>
-              <Route exact path={"/" } render={() => isAuthenticated ?
-                  <Redirect to="/room" /> :
+              <Route exact path={`${process.env.PUBLIC_URL}/` } render={() => isAuthenticated ?
+                  <Redirect to={`${process.env.PUBLIC_URL}/room`} /> :
                   <Login authenticate={authenticate} />}/>
-              <Route exact path={"/room"} render={() => isAuthenticated ?
+              <Route exact path={`${process.env.PUBLIC_URL}/room`} render={() => isAuthenticated ?
                   <Room room={room} logout={logout} /> :
-                  <Redirect to="/" /> }/>
+                  <Redirect to={`${process.env.PUBLIC_URL}/` } /> }/>
+               <Redirect to={`${process.env.PUBLIC_URL}/`} /> {/* 404 */}
             </Switch>
           </Suspense>
         </Router>

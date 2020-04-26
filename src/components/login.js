@@ -54,7 +54,7 @@ class Login extends React.Component {
                 <div id="userFormArea">
                     <form onSubmit={login} className="form-signin" id="userForm">
                         <div className="text-center">
-                            <img className="mb-4" src="/bg/thelogo.png" alt="" width="72" height="72"/>
+                            <img className="mb-4" src={`${process.env.PUBLIC_URL}/bg/thelogo.png`} alt="" width="72" height="72"/>
                             <h1 className="h3 mb-3 font-weight-normal">Please sign in</h1>
                         </div>
 
