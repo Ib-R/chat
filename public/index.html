@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
+    <meta name="description" content="React chat app with rooms functionality">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="theme-color" content="#000000">
     <!--
@@ -20,14 +21,8 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.css" />
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.css"  rel="stylesheet" /> -->
     
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
-    <script src="%PUBLIC_URL%/js/push/push.min.js"></script>
-    <script src="%PUBLIC_URL%/js/bootstrap-4.0.0.js"></script>
-
     <title>React Chat App</title>
   </head>
   <body>
@@ -45,5 +40,29 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+
+    <script src="%PUBLIC_URL%/js/jquery-3.5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.js" defer></script>
+    <script src="%PUBLIC_URL%/js/bootstrap-4.4.1.js" defer></script>
+    <script src="%PUBLIC_URL%/js/push/push.min.js" defer></script>
+    <script type="text/javascript">
+    // Defer styles
+      const loadStyles = src => {
+          if(document.createStylesheet){
+              document.createStylesheet(src)
+          }else {
+              const stylesheet = document.createElement('link');
+              stylesheet.href = src;
+              stylesheet.type = 'text/css';
+              stylesheet.rel = 'stylesheet';
+              document.getElementsByTagName('head')[0].appendChild(stylesheet);
+          }
+      }
+  
+      window.onload = function () {
+        loadStyles('https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.css');
+      }
+  </script>
   </body>
 </html>

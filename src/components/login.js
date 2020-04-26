@@ -34,9 +34,9 @@ class Login extends React.Component {
                 res.json()
                 .then((data)=>{                    
                     if(data.user){
-                        document.cookie = "username="+data.user+"; expires="+Date(Date.now()+9000)+"";
-                        document.cookie = "server="+server+"; expires="+Date(Date.now()+9000)+"";
-                        document.cookie = "room="+data.room+"; expires="+Date(Date.now()+9000)+"";
+                        document.cookie = `username=${data.user}; expires=${Date(Date.now()+9000)}; path=/`;
+                        document.cookie = `server=${server}; expires=${Date(Date.now()+9000)}; path=/`;
+                        document.cookie = `room=${data.room}; expires=${Date(Date.now()+9000)}; path=/`;
                         this.props.authenticate();
                     }else{
                         this.setState({showMessages:true}); // show the message div
@@ -54,7 +54,7 @@ class Login extends React.Component {
                 <div id="userFormArea">
                     <form onSubmit={login} className="form-signin" id="userForm">
                         <div className="text-center">
-                            <img className="mb-4" src={`${process.env.PUBLIC_URL}/bg/thelogo.png`} alt="" width="72" height="72"/>
+                            <img className="mb-2" src={`${process.env.PUBLIC_URL}/bg/thelogo_web.png`} alt="" width="90"/>
                             <h1 className="h3 mb-3 font-weight-normal">Please sign in</h1>
                         </div>
 

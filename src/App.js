@@ -22,15 +22,16 @@ class App extends Component {
 
   render() {
     const {room, isAuthenticated} = this.state;
+    const publicURL = process.env.PUBLIC_URL;
 
     const authenticate = () => {      
       this.setState({room: GetCookie("room"), isAuthenticated: true});
     }
 
     const logout = () => {
-      document.cookie = 'username=; expires=Thu, 01 Jan 1970 00:00:01 GMT;'; 
-      document.cookie = 'room=; expires=Thu, 01 Jan 1970 00:00:01 GMT;'; 
-      document.cookie = `server=; expires=Thu, 01 Jan 1970 00:00:01 GMT;`;
+      document.cookie = 'username=; expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/;'; 
+      document.cookie = 'room=; expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/;'; 
+      document.cookie = `server=; expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/;`;
       this.setState({room: '', isAuthenticated: false});
     }
 
@@ -39,13 +40,13 @@ class App extends Component {
         <Router>
           <Suspense fallback={<h1 className="text-center">Loading...</h1>}>
             <Switch>
-              <Route exact path={`${process.env.PUBLIC_URL}/` } render={() => isAuthenticated ?
-                  <Redirect to={`${process.env.PUBLIC_URL}/room`} /> :
+              <Route exact path={`${publicURL}/` } render={() => isAuthenticated ?
+                  <Redirect to={`${publicURL}/room`} /> :
                   <Login authenticate={authenticate} />}/>
-              <Route exact path={`${process.env.PUBLIC_URL}/room`} render={() => isAuthenticated ?
+              <Route exact path={`${publicURL}/room`} render={() => isAuthenticated ?
                   <Room room={room} logout={logout} /> :
-                  <Redirect to={`${process.env.PUBLIC_URL}/` } /> }/>
-               <Redirect to={`${process.env.PUBLIC_URL}/`} /> {/* 404 */}
+                  <Redirect to={`${publicURL}/` } /> }/>
+               <Redirect to={`${publicURL}/`} /> {/* 404 */}
             </Switch>
           </Suspense>
         </Router>
