@@ -91,10 +91,23 @@ export const imgUpload =  (e)=>{
 };
 
 export function messageSubmit(e){
+    const tagBody = '(?:[^"\'>]|"[^"]*"|\'[^\']*\')*';
+    const tagOrComment = new RegExp(
+        '<(?:'
+        // Comment body.
+        + '!--(?:(?:-*[^->])*--+|-?)'
+        // Special "raw text" elements whose content should be elided.
+        + '|script\\b' + tagBody + '>[\\s\\S]*?</script\\s*'
+        + '|style\\b' + tagBody + '>[\\s\\S]*?</style\\s*'
+        // Regular name
+        + '|/?[a-z]'
+        + tagBody
+        + ')>',
+        'gi');
     const $message = document.querySelector('#message');
     var data = {}
     e.preventDefault();
-    data = {msg: $message.value, user:GetCookie("username")};
+    data = {msg: $message.value.replace(tagOrComment, ''), user:GetCookie("username")};
     socket.emit('send message', data);
     $message.value = "";
 }
@@ -109,8 +122,12 @@ socket.on('new message', (data)=>{
             </div>
             <div class="clearfix"></div>`);
     }else{
-        $chat.insertAdjacentHTML('beforeend','<div class="bg-primary float-left msg"><p class="text-light"><strong>'+data.user+'</strong>: '+data.msg+'</p></div><div class="clearfix"></div>');
-        // updateUserHead(data.user);
+        $chat.insertAdjacentHTML('beforeend',
+            `<div class="bg-primary float-left msg">
+                <strong class="username">${data.user}</strong>
+                <p class="text-light">${data.msg} <small>${data.time}</small></p>
+            </div>
+            <div class="clearfix"></div>`);
         spawnNotification('You Got new Message','https://image.flaticon.com/teams/slug/freepik.jpg','New Message');
     }
     updateScroll()
