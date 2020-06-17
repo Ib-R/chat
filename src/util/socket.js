@@ -1,27 +1,8 @@
-import {GetCookie} from "./util"
+import {GetCookie} from "./util";
+
 export const socket = window.io.connect('//'+GetCookie('server'));
 
 var timer;
-
-function updateRoomDetails(data) {
-    const roomName = document.getElementById("roomName"),
-    membersCount = document.getElementById("membersCount"),
-    members = document.getElementById("members");
-
-    roomName.innerHTML = "";
-    members.innerHTML = "";
-    roomName.insertAdjacentHTML('beforeend', capitalize(data.room));
-    membersCount.innerHTML = `${data.users.length} members`;
-    data.users.forEach((user, i) => {
-        // if(nameList){ // Check if username already exists
-        members.insertAdjacentHTML('beforeend',`<li>${user.username}</li>`);
-        // }
-    });
-}
-
-function capitalize(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}
     
 // Init Notfication
 function spawnNotification(theBody,theIcon,theTitle) {
@@ -60,10 +41,6 @@ socket.on('typing', (data)=>{
             $typing.innerHTML ='';
             membersCount.classList.remove("d-none");
         }, 700);
-});
-
-socket.on("roomUsers", data => {
-    updateRoomDetails(data);
 });
 
 // File upload
